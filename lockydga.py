@@ -16,6 +16,9 @@ from rotate import __ROR4__, __ROL4__ # source: https://github.com/tandasat/scri
 
 WORD = c_ushort
 
+# Locky DGA seed. Forcepoint claim this is now "9"
+SEED = 9
+
 # implements the Windows SYSTEMTIME structure for completeness
 # based on: https://msdn.microsoft.com/en-us/library/windows/desktop/ms724950%28v=vs.85%29.aspx?f=255&MSPPError=-2147217396
 class SYSTEMTIME(Structure):
@@ -87,11 +90,42 @@ def LockyDGA(pos, cfgseed, SystemTime):
 
 	return "".join(domain)
 
-# example, use todays date
-t = datetime.now()
+if __name__ == "__main__":
 
-# build a SYSTEMTIME object using todays date from above
-systemtime = SYSTEMTIME(t.year, t.month, t.weekday(), t.day, t.hour, t.minute, t.second, (t.microsecond/1000)) 
+	print "[*] Locky DGA Generator" 
+	year = raw_input("Enter the year to generate for [2016] > ")
 
-for z in range(8):
-	print LockyDGA(z, 7, systemtime)
+	if not year:
+		year = 2016
+	else:
+		try: 
+			year = int(year)
+		except:
+			print "[-] Year should be an integer value."
+			quit()
+
+	month= raw_input("Enter the month to generate for [3] > ")
+
+	if not month:
+		month = 3
+	else:
+		try: 
+			month = int(month)
+		except:
+			print "[-] Month should be an integer value."
+			quit()
+
+	day = raw_input("Enter the month to generate for [1] > ")
+
+	if not day:
+		day = 1
+	else:
+		try: 
+			day = int(day)
+		except:
+			print "[-] Day should be an integer value."
+
+	systemtime = SYSTEMTIME(year, month, 0, day, 0, 0, 0, 0) 
+
+	for z in range(8):
+		print LockyDGA(z, SEED, systemtime)
