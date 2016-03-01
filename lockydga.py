@@ -6,13 +6,10 @@
 #
 # Author: Kris Hunt <kris_hunt@Symantec.com> 
 # Date: 1-March-16
-# Version: 0.01
-#
-# Todo - Get it working properly. Right now it produces results which do 
-# not align with the Locky DGA
+# Version: 0.1
 #
 
-from numpy import uint32
+from numpy import uint32,seterr
 from ctypes import *
 from datetime import datetime
 from rotate import __ROR4__, __ROL4__ # source: https://github.com/tandasat/scripts_for_RE/blob/master/rotate.py
@@ -35,6 +32,10 @@ class SYSTEMTIME(Structure):
 # C source from: 
 # https://blogs.forcepoint.com/security-labs/lockys-new-dga-seeding-new-domains
 def LockyDGA(pos, cfgseed, SystemTime):
+
+	# supress numpy integer overflow warnings, we desire this behaviour
+	seterr(over='ignore')
+	
 	domain = []
 	
 	modConst1 = 0xb11924e1
