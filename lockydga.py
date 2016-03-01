@@ -13,6 +13,8 @@ from numpy import uint32,seterr
 from ctypes import *
 from datetime import datetime
 from rotate import __ROR4__, __ROL4__ # source: https://github.com/tandasat/scripts_for_RE/blob/master/rotate.py
+import socket
+import whois
 
 WORD = c_ushort
 
@@ -128,4 +130,15 @@ if __name__ == "__main__":
 	systemtime = SYSTEMTIME(year, month, 0, day, 0, 0, 0, 0) 
 
 	for z in range(8):
-		print LockyDGA(z, SEED, systemtime)
+		domain = LockyDGA(z, SEED, systemtime)
+		print "\n\n[+] DGA: " + domain
+		try:
+			ip = socket.gethostbyname(domain)
+			print "Domain is Alive! (ip: " + ip +")"
+		except socket.error:
+			print "Error: Cannot resolve domain."
+		try:
+			w = whois.whois(domain)
+			print w
+		except whois.parser.PywhoisError:
+			print "Error: Domain not registered"
