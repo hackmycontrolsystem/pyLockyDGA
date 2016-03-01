@@ -104,7 +104,7 @@ if __name__ == "__main__":
 			print "[-] Year should be an integer value."
 			quit()
 
-	month= raw_input("Enter the month to generate for [3] > ")
+	month= raw_input("Enter the month (1-12) to generate for [3] > ")
 
 	if not month:
 		month = 3
@@ -115,7 +115,7 @@ if __name__ == "__main__":
 			print "[-] Month should be an integer value."
 			quit()
 
-	day = raw_input("Enter the month to generate for [1] > ")
+	day = raw_input("Enter the day (1-31) to generate for [1] > ")
 
 	if not day:
 		day = 1
