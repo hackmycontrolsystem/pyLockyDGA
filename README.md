@@ -6,10 +6,12 @@ See this blog post for their article: https://blogs.forcepoint.com/security-labs
 Pre-requisites:
 
 - Numpy
-        pip install numpy
+ 
+                pip install numpy
 
 - Whois Support (optional)
-        pip install python-whois
+
+                pip install python-whois
 
 Engineered in Python so we can build tools around confirming if domains were Locky related and to predict back in the past, future or present based on current, past or future seed values.
 
