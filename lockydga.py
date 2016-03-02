@@ -4,9 +4,32 @@
 #
 # Based on the reverse engineering from Forcepoint
 #
-# Author: Kris Hunt <kris_hunt@Symantec.com> 
+# Authors: Kris Hunt <kris_hunt@Symantec.com> 
+#		Jose Grayda <jose_grayda@symantec.com
 # Date: 1-March-16
-# Version: 0.1
+# Version: 0.5
+################################################################################
+# The MIT License (MIT)
+#
+# Copyright (c) 2016 kris hunt
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy of
+# this software and associated documentation files (the "Software"), to deal in
+# the Software without restriction, including without limitation the rights to
+# use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+# the Software, and to permit persons to whom the Software is furnished to do so,
+# subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+# FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+# COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+# IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+# CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+################################################################################
 #
 
 from numpy import uint32,seterr
@@ -14,7 +37,6 @@ from ctypes import *
 from datetime import datetime
 from rotate import __ROR4__, __ROL4__ # source: https://github.com/tandasat/scripts_for_RE/blob/master/rotate.py
 import socket
-import whois
 
 WORD = c_ushort
 
@@ -126,19 +148,26 @@ if __name__ == "__main__":
 			day = int(day)
 		except:
 			print "[-] Day should be an integer value."
+			quit()
 
 	systemtime = SYSTEMTIME(year, month, 0, day, 0, 0, 0, 0) 
 
 	for z in range(8):
 		domain = LockyDGA(z, SEED, systemtime)
-		print "\n\n[+] DGA: " + domain
+		print "\n[*] DGA: " + domain
 		try:
 			ip = socket.gethostbyname(domain)
-			print "Domain is Alive! (ip: " + ip +")"
+			print "[+] Domain is Alive! (ip: " + ip +")"
 		except socket.error:
-			print "Error: Cannot resolve domain."
+			print "[-] Error: Cannot resolve domain."
+
 		try:
-			w = whois.whois(domain)
-			print w
-		except whois.parser.PywhoisError:
-			print "Error: Domain not registered"
+			import whois
+			
+			try:
+				w = whois.whois(domain)
+				print w
+			except whois.parser.PywhoisError:
+				print "[-] Error: Domain not registered"
+		except ImportError:
+			print "[-] Install python-whois module for whois support."
